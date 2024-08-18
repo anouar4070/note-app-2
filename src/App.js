@@ -45,11 +45,16 @@ export default function App() {
         // This does not rearrange the notes
         // setNotes(oldNotes => oldNotes.map(oldNote => {
         //     return oldNote.id === currentNoteId
-        //         ? { ...oldNote, body: text }
+                // ? { ...oldNote, body: text }
         //         : oldNote
         // }))
     }
     
+    function deleteNote(event, noteId) {
+        event.stopPropagation()
+        setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+    }
+
     function findCurrentNote() {
         return notes.find(note => {
             return note.id === currentNoteId
@@ -71,6 +76,7 @@ export default function App() {
                     currentNote={findCurrentNote()}
                     setCurrentNoteId={setCurrentNoteId}
                     newNote={createNewNote}
+                    deleteNote={deleteNote}
                 />
                 {
                     currentNoteId && 

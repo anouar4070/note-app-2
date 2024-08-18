@@ -4,7 +4,9 @@ import Editor from "./components/Editor"
 
 import Split from "react-split"
 import {nanoid} from "nanoid"
-
+import { onSnapshot } from "firebase/firestore"
+import { notesCollection } from "./firebase" 
+ 
 export default function App() {
     // Lazy state initialization (just add arrow function)
     const [notes, setNotes] = React.useState(
@@ -21,9 +23,18 @@ export default function App() {
 
 
 
+    // React.useEffect(() => {
+    //     localStorage.setItem("notes", JSON.stringify(notes))
+    // }, [notes])
+
     React.useEffect(() => {
-        localStorage.setItem("notes", JSON.stringify(notes))
-    }, [notes])
+        const unsubscribe = onSnapshot(notesCollection, function(snapshot) {
+            // Sync up our local notes array with the snapshot data
+            console.log("THINGS ARE CHANGING!")
+        })
+        return unsubscribe
+    }, [])
+
     
     function createNewNote() {
         const newNote = {

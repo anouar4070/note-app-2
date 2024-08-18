@@ -10,7 +10,7 @@ export default function Sidebar(props) {
                 }`}
                 onClick={() => props.setCurrentNoteId(note.id)}
             >
-              {/* add note summary title */}
+               {/* add note summary title  */}
                  <h4 className="text-snippet">{note.body.split("\n")[0]}</h4>
                  <button 
                     className="delete-btn"

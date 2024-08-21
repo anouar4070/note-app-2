@@ -20,6 +20,7 @@ export default function App() {
   //        (notes[0]?.id) || ""
   // )
   const [currentNoteId, setCurrentNoteId] = React.useState("");
+  const [tempNoteText, setTempNoteText] = React.useState("")
 
   const currentNote =
     notes.find((note) => note.id === currentNoteId) || notes[0];
@@ -47,6 +48,29 @@ export default function App() {
       setCurrentNoteId(notes[0]?.id);
     }
   }, [notes]);
+
+  React.useEffect(() => {
+    if (currentNote) {
+        setTempNoteText(currentNote.body)
+    }
+}, [currentNote])
+
+/**
+     * Create an effect that runs any time the tempNoteText changes
+     * Delay the sending of the request to Firebase
+     *  uses setTimeout
+     * use clearTimeout to cancel the timeout
+     */
+React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+        if (currentNote && tempNoteText !== currentNote.body) {
+            updateNote(tempNoteText)
+        }
+    }, 500)
+    return () => clearTimeout(timeoutId)
+}, [tempNoteText])
+
+
 
   async function createNewNote() {
     const newNote = {
@@ -110,7 +134,10 @@ export default function App() {
             deleteNote={deleteNote}
           />
 
-          <Editor currentNote={currentNote} updateNote={updateNote} />
+          <Editor 
+         tempNoteText={tempNoteText}
+         setTempNoteText={setTempNoteText} 
+          />
         </Split>
       ) : (
         <div className="no-notes">
